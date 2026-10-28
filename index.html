@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Finn's Birthday List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Light-only on purpose: a bright party palette. */
+  :root{
+    color-scheme:light;
+    --cream:#fff6ec;
+    --paper:#ffffff;
+    --ink:#2a1846;
+    --ink-soft:#6b5a86;
+    --pink:#ff5c9d;
+    --orange:#ff9f1c;
+    --sky:#38bdf8;
+    --lime:#8fdc5a;
+    --lemon:#ffd23f;
+    --grape:#b28dff;
+    --stroke:2.5px solid var(--ink);
+    --pop-shadow:6px 6px 0 var(--ink);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background-color:var(--cream);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cg opacity='.45'%3E%3Crect x='14' y='20' width='16' height='5' rx='2.5' fill='%23ff5c9d' transform='rotate(30 22 22)'/%3E%3Crect x='120' y='16' width='16' height='5' rx='2.5' fill='%2338bdf8' transform='rotate(-40 128 18)'/%3E%3Crect x='70' y='70' width='16' height='5' rx='2.5' fill='%23ffd23f' transform='rotate(70 78 72)'/%3E%3Crect x='150' y='110' width='16' height='5' rx='2.5' fill='%238fdc5a' transform='rotate(15 158 112)'/%3E%3Crect x='30' y='130' width='16' height='5' rx='2.5' fill='%23b28dff' transform='rotate(-20 38 132)'/%3E%3Crect x='96' y='150' width='16' height='5' rx='2.5' fill='%23ff9f1c' transform='rotate(55 104 152)'/%3E%3Ccircle cx='160' cy='60' r='3' fill='%23ff5c9d'/%3E%3Ccircle cx='50' cy='90' r='3' fill='%2338bdf8'/%3E%3C/g%3E%3C/svg%3E");
+    color:var(--ink);
+    font-family:"Nunito", "Segoe UI", Arial, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.fun{font-family:"Fredoka", "Segoe UI", Arial, sans-serif; text-wrap:balance;}
+  button{font:inherit; color:inherit;}
+  [hidden]{display:none !important;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    max-width:1100px;
+    margin:0 auto;
+    padding:56px 24px 28px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:center;
+    gap:24px;
+  }
+  .kicker{
+    display:inline-block;
+    font-family:"Fredoka", sans-serif;
+    font-weight:600;
+    font-size:.9rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    background:var(--lemon);
+    border:var(--stroke);
+    border-radius:999px;
+    padding:4px 14px;
+    transform:rotate(-2deg);
+    margin:0 0 18px;
+  }
+  h1{
+    font-size:clamp(2.7rem, 8vw, 5.4rem);
+    line-height:.95;
+    margin:0 0 24px;
+    font-weight:700;
+    letter-spacing:-.01em;
+  }
+  h1 .rainbow span{display:inline-block;}
+  h1 .rainbow span:nth-child(5n+1){color:var(--pink); transform:rotate(-4deg);}
+  h1 .rainbow span:nth-child(5n+2){color:var(--orange); transform:translateY(-4px);}
+  h1 .rainbow span:nth-child(5n+3){color:var(--sky); transform:rotate(3deg);}
+  h1 .rainbow span:nth-child(5n+4){color:#4fb52a; transform:translateY(3px);}
+  h1 .rainbow span:nth-child(5n+5){color:var(--grape); transform:rotate(-2deg);}
+
+  .countdown{
+    display:inline-flex;
+    align-items:center;
+    gap:16px;
+    background:var(--paper);
+    border:var(--stroke);
+    border-radius:22px;
+    box-shadow:var(--pop-shadow);
+    padding:12px 22px 12px 14px;
+  }
+  .cd-num{
+    font-family:"Fredoka", sans-serif;
+    font-weight:700;
+    font-size:2.6rem;
+    line-height:1;
+    min-width:84px;
+    text-align:center;
+    background:var(--pink);
+    color:#fff;
+    border:var(--stroke);
+    border-radius:16px;
+    padding:10px 12px;
+    font-variant-numeric:tabular-nums;
+  }
+  .cd-label{font-family:"Fredoka", sans-serif; font-weight:600; font-size:1.3rem;}
+  .cd-label small{display:block; font-family:"Nunito", sans-serif; font-weight:600; font-size:.88rem; color:var(--ink-soft);}
+  .cd-today{font-family:"Fredoka", sans-serif; font-weight:700; font-size:1.8rem; color:var(--pink); padding:6px 8px;}
+
+  .cake{width:230px; height:auto;}
+  .flame{transform-origin:center bottom; animation:flicker 1.1s ease-in-out infinite alternate;}
+  .flame:nth-of-type(2){animation-delay:.3s;}
+  .flame:nth-of-type(3){animation-delay:.6s;}
+  @keyframes flicker{from{transform:scale(1,1) rotate(-3deg);} to{transform:scale(.88,1.12) rotate(3deg);}}
+
+  .balloon-deco{position:absolute; width:62px; pointer-events:none; animation:bob 4s ease-in-out infinite;}
+  .balloon-deco.b1{top:14px; left:-10px; color:var(--sky);}
+  .balloon-deco.b2{top:12px; right:250px; color:var(--orange); width:50px; animation-delay:-1.6s;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg);} 50%{transform:translateY(-12px) rotate(3deg);}}
+
+  @media (max-width:760px){
+    .hero{grid-template-columns:1fr; padding-top:40px; text-align:left;}
+    .cake{width:150px; position:absolute; right:10px; top:18px; opacity:.95;}
+    .balloon-deco{display:none;}
+    h1{padding-right:120px;}
+  }
+  @media (max-width:420px){
+    .cake{width:110px;}
+    h1{padding-right:80px;}
+  }
+
+  /* ---------- who tabs ---------- */
+  main{max-width:1100px; margin:0 auto; padding:12px 24px 40px;}
+  .who-label{font-family:"Fredoka", sans-serif; font-weight:600; font-size:1rem; color:var(--ink-soft); margin:18px 0 10px;}
+  .who{display:flex; flex-wrap:wrap; gap:12px;}
+  .tab{
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--paper);
+    border:var(--stroke);
+    border-radius:16px;
+    box-shadow:4px 4px 0 var(--ink);
+    padding:10px 16px;
+    font-family:"Fredoka", sans-serif; font-weight:600; font-size:1.05rem;
+    cursor:pointer;
+    transition:transform .12s, box-shadow .12s, background .12s;
+  }
+  .tab:hover{transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--ink);}
+  .tab[aria-selected="true"]{background:var(--tab); transform:translate(3px,3px); box-shadow:1px 1px 0 var(--ink);}
+  .tab .n{
+    font-size:.8rem; min-width:24px; height:24px; padding:0 7px;
+    display:inline-grid; place-items:center;
+    border-radius:999px; background:var(--cream); border:2px solid var(--ink);
+  }
+  .tab:focus-visible,.chip:focus-visible,.claim:focus-visible,.peek:focus-visible,.x:focus-visible,.go:focus-visible{outline:3px solid var(--sky); outline-offset:3px;}
+
+  /* ---------- board ---------- */
+  .board{
+    margin-top:28px;
+    background:color-mix(in srgb, var(--paper) 70%, transparent);
+    border:var(--stroke);
+    border-radius:28px;
+    padding:22px 22px 34px;
+  }
+  .board-head{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; margin-bottom:30px;}
+  .tally{display:flex; flex-wrap:wrap; gap:8px;}
+  .t{
+    background:var(--cream); border:2px solid var(--ink); border-radius:12px;
+    padding:5px 11px; font-weight:700; font-size:.9rem; color:var(--ink-soft);
+  }
+  .t b{font-family:"Fredoka", sans-serif; color:var(--ink); font-size:1.05rem; margin-right:3px;}
+  .t.got{background:#ffe1ee;}
+  .t.left{background:#e7f8db;}
+  .filters{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    background:var(--paper); border:2px solid var(--ink); border-radius:999px;
+    padding:6px 13px; font-weight:700; font-size:.86rem; cursor:pointer;
+  }
+  .chip[aria-pressed="true"]{background:var(--ink); color:#fff;}
+
+  .stickers{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px, 1fr));
+    gap:34px 28px;
+    padding:6px 6px 0;
+  }
+
+  /* ---------- sticker card ---------- */
+  .sticker{
+    position:relative;
+    display:flex; flex-direction:column;
+    background:var(--paper);
+    border:var(--stroke);
+    border-radius:22px;
+    box-shadow:var(--pop-shadow);
+    transform:rotate(var(--tilt));
+    transition:transform .18s ease, box-shadow .18s ease;
+    cursor:pointer;
+    animation:drop .5s cubic-bezier(.3,1.5,.5,1) both;
+    animation-delay:var(--delay);
+  }
+  @keyframes drop{from{opacity:0; transform:translateY(-18px) rotate(calc(var(--tilt) * 3));}}
+  .sticker:hover{transform:rotate(0) translateY(-4px); box-shadow:9px 10px 0 var(--ink);}
+  .tape{
+    position:absolute; top:-13px; left:50%;
+    transform:translateX(-50%) rotate(-3deg);
+    background:var(--accent-soft);
+    border:2px solid var(--ink); border-radius:6px;
+    padding:2px 12px;
+    font-family:"Fredoka", sans-serif; font-weight:600; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase;
+    z-index:3;
+  }
+  .price{
+    position:absolute; top:-16px; right:-14px; z-index:5;
+    width:62px; height:62px; border-radius:50%;
+    display:grid; place-items:center;
+    background:var(--lemon); border:var(--stroke);
+    font-family:"Fredoka", sans-serif; font-weight:700; font-size:1.15rem;
+    transform:rotate(12deg);
+  }
+  .pic{
+    position:relative;
+    margin:24px 16px 0;
+    height:210px;
+    border-radius:16px;
+    border:2px solid var(--ink);
+    background:var(--accent-soft);
+    display:grid; place-items:center;
+    overflow:hidden;
+  }
+  .pic img{max-width:86%; max-height:86%; object-fit:contain; mix-blend-mode:multiply; transition:filter .3s, opacity .3s;}
+  .stamp{
+    position:absolute; top:50%; left:50%; z-index:3;
+    transform:translate(-50%,-50%) rotate(-14deg) scale(2.2);
+    opacity:0;
+    border:4px solid var(--pink); color:var(--pink);
+    background:rgba(255,255,255,.9);
+    border-radius:12px; padding:4px 16px;
+    font-family:"Fredoka", sans-serif; font-weight:700; font-size:1.6rem;
+    letter-spacing:.06em; text-transform:uppercase;
+    transition:opacity .2s, transform .35s cubic-bezier(.3,1.6,.5,1);
+    pointer-events:none;
+  }
+  .claimed .stamp{opacity:1; transform:translate(-50%,-50%) rotate(-14deg) scale(1);}
+  .claimed .pic img{filter:grayscale(.75); opacity:.5;}
+
+  .body{padding:14px 18px 18px; display:flex; flex-direction:column; gap:10px; flex:1;}
+  .body h3{margin:0; font-size:1.12rem; font-weight:600; line-height:1.25;}
+  .peek{background:none; border:0; padding:0; text-align:left; cursor:pointer; font:inherit;}
+  .peek:hover{text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:3px;}
+  .reqs{display:flex; flex-wrap:wrap; gap:6px;}
+  .reqs span{font-size:.8rem; font-weight:700; border:2px dashed var(--ink-soft); border-radius:8px; padding:1px 8px; color:var(--ink-soft);}
+  .claim{
+    margin-top:auto;
+    width:100%;
+    background:var(--ink); color:#fff;
+    border:var(--stroke); border-radius:14px;
+    padding:10px 12px;
+    font-family:"Fredoka", sans-serif; font-weight:600; font-size:1rem;
+    cursor:pointer;
+    transition:transform .1s;
+  }
+  .claim:active{transform:scale(.97);}
+  .claimed .claim{background:var(--paper); color:var(--ink);}
+
+  /* ---------- balloon pop ---------- */
+  .pop{position:absolute; inset:0; z-index:4; display:grid; place-items:center; pointer-events:none; color:var(--accent);}
+  .pop svg{width:92px; animation:inflate .5s cubic-bezier(.3,1.6,.5,1) forwards;}
+  @keyframes inflate{from{transform:translateY(40px) scale(.2);} to{transform:translateY(0) scale(1.15);}}
+  .boom{
+    font-family:"Fredoka", sans-serif; font-weight:700; font-size:2rem;
+    background:var(--lemon); color:var(--ink);
+    border:3px solid var(--ink); border-radius:14px; padding:2px 14px;
+    animation:boom .65s ease-out forwards;
+  }
+  @keyframes boom{0%{transform:scale(.4) rotate(-10deg);} 35%{transform:scale(1.15) rotate(4deg);} 100%{transform:scale(1) rotate(0); opacity:0;}}
+  .shard{
+    position:absolute; left:50%; top:50%;
+    width:12px; height:6px; margin:-3px 0 0 -6px;
+    border-radius:3px; background:var(--c);
+    transform:rotate(var(--a)) translateX(0);
+    animation:shard .6s ease-out forwards;
+  }
+  @keyframes shard{to{transform:rotate(var(--a)) translateX(var(--d)); opacity:0;}}
+
+  /* ---------- empty state ---------- */
+  .empty{text-align:center; padding:30px 10px 10px;}
+  .empty svg{width:110px; height:auto;}
+  .empty h3{font-size:1.5rem; margin:12px 0 4px;}
+  .empty p{color:var(--ink-soft); margin:0; font-weight:600;}
+
+  /* ---------- peek dialog ---------- */
+  dialog{
+    width:min(760px, calc(100vw - 32px));
+    max-height:calc(100vh - 40px);
+    padding:0;
+    border:var(--stroke);
+    border-radius:28px;
+    box-shadow:10px 10px 0 var(--ink);
+    background:var(--paper);
+    color:var(--ink);
+    overflow:auto;
+  }
+  dialog::backdrop{background:rgba(42,24,70,.45);}
+  .peek-inner{position:relative; display:grid; grid-template-columns:1.05fr 1fr; gap:24px; padding:26px;}
+  .peek-inner .pic{margin:0; height:auto; min-height:300px; aspect-ratio:1;}
+  .peek-inner .tape{position:static; transform:rotate(-3deg); display:inline-block; margin-bottom:10px;}
+  .peek-inner h2{font-size:1.7rem; margin:0 0 12px; line-height:1.15;}
+  .big-price{display:inline-block; font-family:"Fredoka", sans-serif; font-weight:700; font-size:2rem; background:var(--lemon); border:var(--stroke); border-radius:14px; padding:2px 14px; transform:rotate(-2deg); margin-bottom:16px;}
+  .peek-info{display:flex; flex-direction:column; gap:12px; padding-top:6px;}
+  .peek-info .reqs{margin-bottom:4px;}
+  .go{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--paper); color:var(--ink); text-decoration:none;
+    border:var(--stroke); border-radius:14px; padding:10px 12px;
+    font-family:"Fredoka", sans-serif; font-weight:600; font-size:1rem;
+    box-shadow:4px 4px 0 var(--ink);
+  }
+  .go:hover{transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--ink);}
+  .x{
+    position:absolute; top:12px; right:12px; z-index:6;
+    width:40px; height:40px; border-radius:50%;
+    background:var(--paper); border:var(--stroke);
+    display:grid; place-items:center; cursor:pointer;
+  }
+  .x svg{width:16px; height:16px;}
+  @media (max-width:640px){
+    .peek-inner{grid-template-columns:1fr; padding:20px;}
+    .peek-inner .pic{min-height:0;}
+    .peek-inner h2{font-size:1.4rem; padding-right:30px;}
+  }
+
+  /* ---------- footer ---------- */
+  footer{max-width:1100px; margin:0 auto; padding:10px 24px 60px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; color:var(--ink-soft); font-weight:700; font-size:.9rem;}
+  .sync{display:inline-flex; align-items:center; gap:7px;}
+  .sync::before{content:""; width:9px; height:9px; border-radius:50%; background:#c9bfd6; border:2px solid var(--ink);}
+  .sync.live::before{background:var(--lime);}
+  .sync.error::before{background:var(--pink);}
+
+  @media (max-width:560px){
+    main,footer{padding-left:16px; padding-right:16px;}
+    .hero{padding-left:16px; padding-right:16px;}
+    .board{padding:18px 14px 28px; border-radius:22px;}
+    .stickers{gap:34px 18px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .sticker,.flame,.balloon-deco,.pop svg,.boom,.shard{animation:none !important;}
+    .sticker,.stamp{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg class="balloon-deco b1" viewBox="0 0 60 120" aria-hidden="true"><path d="M30 4C14 4 5 17 5 31c0 17 13 29 25 33 12-4 25-16 25-33C55 17 46 4 30 4z" fill="currentColor" stroke="#2a1846" stroke-width="2.5"/><path d="M26 64l4 6 4-6z" fill="currentColor" stroke="#2a1846" stroke-width="2"/><path d="M30 70c-6 10 6 18 0 28s6 14 0 20" fill="none" stroke="#2a1846" stroke-width="2"/><ellipse cx="19" cy="22" rx="5" ry="8" fill="#fff" opacity=".6"/></svg>
+  <svg class="balloon-deco b2" viewBox="0 0 60 120" aria-hidden="true"><path d="M30 4C14 4 5 17 5 31c0 17 13 29 25 33 12-4 25-16 25-33C55 17 46 4 30 4z" fill="currentColor" stroke="#2a1846" stroke-width="2.5"/><path d="M26 64l4 6 4-6z" fill="currentColor" stroke="#2a1846" stroke-width="2"/><path d="M30 70c-6 10 6 18 0 28s6 14 0 20" fill="none" stroke="#2a1846" stroke-width="2"/><ellipse cx="19" cy="22" rx="5" ry="8" fill="#fff" opacity=".6"/></svg>
+
+  <div>
+    <p class="kicker">March 23 &middot; Wish list</p>
+    <h1>Finn's <span class="rainbow" aria-label="Birthday"><span>B</span><span>i</span><span>r</span><span>t</span><span>h</span><span>d</span><span>a</span><span>y</span></span><br>List</h1>
+    <div class="countdown" id="countdown"></div>
+  </div>
+
+  <svg class="cake" viewBox="0 0 220 210" aria-hidden="true">
+    <rect x="76" y="36" width="12" height="40" rx="3" fill="#38bdf8" stroke="#2a1846" stroke-width="2.5"/>
+    <rect x="104" y="30" width="12" height="46" rx="3" fill="#ff9f1c" stroke="#2a1846" stroke-width="2.5"/>
+    <rect x="132" y="36" width="12" height="40" rx="3" fill="#8fdc5a" stroke="#2a1846" stroke-width="2.5"/>
+    <path class="flame" d="M82 34c-7-6-4-13 0-20 4 7 7 14 0 20z" fill="#ffd23f" stroke="#2a1846" stroke-width="2"/>
+    <path class="flame" d="M110 28c-7-6-4-13 0-20 4 7 7 14 0 20z" fill="#ffd23f" stroke="#2a1846" stroke-width="2"/>
+    <path class="flame" d="M138 34c-7-6-4-13 0-20 4 7 7 14 0 20z" fill="#ffd23f" stroke="#2a1846" stroke-width="2"/>
+    <rect x="50" y="74" width="120" height="50" rx="12" fill="#fff" stroke="#2a1846" stroke-width="3"/>
+    <path d="M50 88c0-8 5-14 12-14h96c7 0 12 6 12 14v4c-5 9-11 9-15 0-5 12-12 12-17 0-5 10-11 10-16 0-5 12-12 12-17 0-5 10-11 10-16 0-5 12-12 12-17 0-4 8-9 8-12 0z" fill="#ff5c9d" stroke="#2a1846" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="26" y="122" width="168" height="62" rx="14" fill="#ffd23f" stroke="#2a1846" stroke-width="3"/>
+    <path d="M26 142h168" stroke="#2a1846" stroke-width="2.5" stroke-dasharray="2 10" stroke-linecap="round"/>
+    <rect x="50" y="156" width="10" height="4" rx="2" fill="#ff5c9d" transform="rotate(30 55 158)"/>
+    <rect x="86" y="162" width="10" height="4" rx="2" fill="#38bdf8" transform="rotate(-25 91 164)"/>
+    <rect x="120" y="154" width="10" height="4" rx="2" fill="#8fdc5a" transform="rotate(60 125 156)"/>
+    <rect x="156" y="164" width="10" height="4" rx="2" fill="#b28dff" transform="rotate(-40 161 166)"/>
+    <ellipse cx="110" cy="190" rx="104" ry="13" fill="#fff" stroke="#2a1846" stroke-width="3"/>
+  </svg>
+</header>
+
+<main>
+  <div class="who-label">Who's shopping?</div>
+  <div class="who" role="tablist" id="who"></div>
+
+  <section class="board" id="board" role="tabpanel">
+    <div class="board-head">
+      <div class="tally" id="tally"></div>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div class="stickers" id="stickers"></div>
+    <div class="empty" id="empty" hidden>
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M60 10L22 100h76z" fill="#b28dff" stroke="#2a1846" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M44 48l30 10M36 70l46 14" stroke="#ffd23f" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="60" cy="10" r="9" fill="#ff5c9d" stroke="#2a1846" stroke-width="3"/>
+        <ellipse cx="60" cy="102" rx="44" ry="8" fill="#ff9f1c" stroke="#2a1846" stroke-width="3"/>
+      </svg>
+      <h3 id="emptyTitle">Nothing here yet</h3>
+      <p id="emptyText">More gifts are coming soon. Check back!</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Made with extra frosting for March 23.</span>
+  <span class="sync" id="sync"></span>
+</footer>
+
+<dialog id="peek" aria-labelledby="peekTitle"></dialog>
+
+<script>
+// Paste the Firebase web config here to share claims with everyone.
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBHOMjWGYRJyI6BFA-g2f-tKHqOZy9Y4yg",
+  authDomain: "finn-bday-list-2027.firebaseapp.com",
+  databaseURL: "https://finn-bday-list-2027-default-rtdb.firebaseio.com",
+  projectId: "finn-bday-list-2027",
+  storageBucket: "finn-bday-list-2027.firebasestorage.app",
+  messagingSenderId: "587345085914",
+  appId: "1:587345085914:web:b3237ccaa397f9296b6ce3"
+};
+const FIREBASE_CDN = "https://cdn.jsdelivr.net/npm/firebase@10.12.2/";
+
+const PEOPLE = [
+  {id:"mom-dad", name:"Mom & Dad", color:"#ff5c9d", gifts:[
+    {id:"B0BYB79YD9", name:"Aurora Palm Pals Belle Strawberry Cow Plush", price:9, reqs:[], img:"img/belle-strawberry-cow.jpg", url:"https://www.amazon.com/dp/B0BYB79YD9"},
+  ]},
+  {id:"grandma-grandpa", name:"Grandma & Grandpa", color:"#ff9f1c", gifts:[]},
+  {id:"grandpa-ray", name:"Grandpa Ray", color:"#38bdf8", gifts:[]},
+  {id:"aunty-m", name:"Aunty M", color:"#8fdc5a", gifts:[]},
+];
+
+const ACCENTS = [
+  ["#ff5c9d", "#ffe1ee"],
+  ["#38bdf8", "#dcf3fe"],
+  ["#ff9f1c", "#ffecd2"],
+  ["#8fdc5a", "#e7f8db"],
+  ["#b28dff", "#efe6ff"],
+];
+const TILTS = [-2.2, 1.6, -1.1, 2.4, -1.8, 1.2];
+const FILTERS = [
+  {id:"all",   label:"Everything", test:()=>true},
+  {id:"lt10",  label:"Under $10",  test:p=>p < 10},
+  {id:"10to25",label:"$10 to $25", test:p=>p >= 10 && p <= 25},
+  {id:"gt25",  label:"$25+",       test:p=>p > 25},
+];
+const BALLOON = '<svg viewBox="0 0 60 90"><path d="M30 4C14 4 5 17 5 31c0 17 13 29 25 33 12-4 25-16 25-33C55 17 46 4 30 4z" fill="currentColor" stroke="#2a1846" stroke-width="2.5"/><path d="M26 64l4 6 4-6z" fill="currentColor" stroke="#2a1846" stroke-width="2"/><path d="M30 70c-4 6 4 10 0 18" fill="none" stroke="#2a1846" stroke-width="2"/><ellipse cx="19" cy="22" rx="5" ry="8" fill="#fff" opacity=".6"/></svg>';
+const CLOSE = '<svg viewBox="0 0 16 16"><path d="M2 2l12 12M14 2L2 14" stroke="#2a1846" stroke-width="2.6" stroke-linecap="round"/></svg>';
+const ARROW = '<svg viewBox="0 0 16 16" width="14" height="14"><path d="M4 12L12 4M6 4h6v6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+
+/* ---------- storage ---------- */
+const CLAIM_KEY = "bday27_claimed";
+const TAB_KEY = "bday27_tab";
+function readLocal(key, fallback){
+  try{ const v = localStorage.getItem(key); return v === null ? fallback : JSON.parse(v); }catch(e){ return fallback; }
+}
+function writeLocal(key, value){
+  try{ localStorage.setItem(key, JSON.stringify(value)); }catch(e){}
+}
+
+let claimed = readLocal(CLAIM_KEY, {});
+let sharedRef = null;
+let current = initialPerson();
+let filter = "all";
+let peekId = null;
+
+function initialPerson(){
+  const fromHash = location.hash.slice(1);
+  if(PEOPLE.some(p=>p.id === fromHash)) return fromHash;
+  const saved = readLocal(TAB_KEY, null);
+  if(PEOPLE.some(p=>p.id === saved)) return saved;
+  return PEOPLE[0].id;
+}
+
+/* ---------- helpers ---------- */
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function storeOf(url){
+  try{
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    if(host.includes("amazon")) return "Amazon";
+    const base = host.split(".")[0];
+    return base.charAt(0).toUpperCase() + base.slice(1);
+  }catch(e){ return ""; }
+}
+function person(){ return PEOPLE.find(p=>p.id === current) || PEOPLE[0]; }
+function findGift(id){
+  for(const p of PEOPLE){
+    const i = p.gifts.findIndex(g=>g.id === id);
+    if(i > -1) return {gift:p.gifts[i], index:i};
+  }
+  return null;
+}
+function accentVars(i){
+  const [acc, soft] = ACCENTS[i % ACCENTS.length];
+  return `--accent:${acc};--accent-soft:${soft};`;
+}
+
+/* ---------- countdown ---------- */
+function renderCountdown(){
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let bday = new Date(now.getFullYear(), 2, 23);
+  if(today > bday) bday = new Date(now.getFullYear() + 1, 2, 23);
+  const days = Math.round((bday - today) / 86400000);
+  $("countdown").innerHTML = days === 0
+    ? `<div class="cd-today">It's party day!</div>`
+    : `<div class="cd-num">${days}</div><div class="cd-label">${days === 1 ? "day" : "days"} to go<small>until March 23</small></div>`;
+}
+
+/* ---------- tabs, tally, filters ---------- */
+function renderTabs(){
+  $("who").innerHTML = PEOPLE.map(p=>`
+    <button class="tab" role="tab" aria-selected="${p.id === current}" data-id="${p.id}" style="--tab:${p.color}">
+      ${esc(p.name)}<span class="n">${p.gifts.length}</span>
+    </button>`).join("");
+}
+
+function renderTally(){
+  const gifts = person().gifts;
+  const total = gifts.reduce((s, g)=>s + g.price, 0);
+  const got = gifts.filter(g=>claimed[g.id]).reduce((s, g)=>s + g.price, 0);
+  $("tally").innerHTML = `
+    <span class="t"><b>${gifts.length}</b>${gifts.length === 1 ? "gift" : "gifts"}</span>
+    <span class="t"><b>$${total}</b>total</span>
+    <span class="t got"><b>$${got}</b>claimed</span>
+    <span class="t left"><b>$${total - got}</b>to go</span>`;
+}
+
+function renderFilters(){
+  $("filters").hidden = person().gifts.length === 0;
+  $("filters").innerHTML = FILTERS.map(f=>
+    `<button class="chip" aria-pressed="${f.id === filter}" data-f="${f.id}">${f.label}</button>`).join("");
+}
+
+/* ---------- stickers ---------- */
+function stickerHTML(g, i, n){
+  const store = storeOf(g.url);
+  const isOn = !!claimed[g.id];
+  return `
+  <article class="sticker${isOn ? " claimed" : ""}" data-card="${g.id}" style="${accentVars(i)}--tilt:${TILTS[i % TILTS.length]}deg;--delay:${(n * 0.06).toFixed(2)}s">
+    ${store ? `<span class="tape">${esc(store)}</span>` : ""}
+    <span class="price">$${g.price}</span>
+    <div class="pic"><img src="${esc(g.img)}" alt="${esc(g.name)}" loading="lazy"><span class="stamp">Claimed!</span></div>
+    <div class="body">
+      <h3><button class="peek" data-id="${g.id}">${esc(g.name)}</button></h3>
+      ${g.reqs.length ? `<div class="reqs">${g.reqs.map(r=>`<span>${esc(r)}</span>`).join("")}</div>` : ""}
+      <button class="claim" data-id="${g.id}" aria-pressed="${isOn}">${isOn ? "Claimed! (undo)" : "Claim this gift"}</button>
+    </div>
+  </article>`;
+}
+
+function renderBoard(){
+  const p = person();
+  const test = FILTERS.find(f=>f.id === filter).test;
+  const shown = p.gifts.map((g, i)=>({g, i})).filter(({g})=>test(g.price));
+  $("stickers").innerHTML = shown.map(({g, i}, n)=>stickerHTML(g, i, n)).join("");
+  $("board").setAttribute("aria-label", p.name);
+  const empty = shown.length === 0;
+  $("empty").hidden = !empty;
+  if(empty){
+    const none = p.gifts.length === 0;
+    $("emptyTitle").textContent = none ? "Nothing here yet" : "No gifts in this price range";
+    $("emptyText").textContent = none ? "More gifts are coming soon. Check back!" : "Try a different price filter.";
+  }
+}
+
+function renderAll(){
+  renderTabs();
+  renderTally();
+  renderFilters();
+  renderBoard();
+}
+
+/* ---------- claim ---------- */
+function paint(id){
+  const isOn = !!claimed[id];
+  document.querySelectorAll(`[data-card="${id}"]`).forEach(el=>{
+    el.classList.toggle("claimed", isOn);
+    const btn = el.querySelector(".claim");
+    btn.setAttribute("aria-pressed", isOn);
+    btn.textContent = isOn ? "Claimed! (undo)" : "Claim this gift";
+  });
+  renderTally();
+}
+
+function popBalloon(pic, done){
+  const pop = document.createElement("div");
+  pop.className = "pop";
+  pop.innerHTML = BALLOON;
+  pic.appendChild(pop);
+  setTimeout(()=>{
+    const colors = ["#ff5c9d", "#ffd23f", "#38bdf8", "#8fdc5a", "#b28dff", "#ff9f1c"];
+    let shards = "";
+    for(let i = 0; i < 14; i++){
+      shards += `<span class="shard" style="--a:${Math.round(i * (360 / 14) + Math.random() * 12)}deg;--d:${70 + Math.round(Math.random() * 50)}px;--c:${colors[i % colors.length]}"></span>`;
+    }
+    pop.innerHTML = `<span class="boom">POP!</span>${shards}`;
+    done();
+  }, 520);
+  setTimeout(()=>pop.remove(), 1250);
+}
+
+function toggle(id, card){
+  const isOn = !claimed[id];
+  if(isOn) claimed[id] = true; else delete claimed[id];
+  if(sharedRef){
+    sharedRef.child(id).set(isOn ? true : null).catch(()=>setSync("error"));
+  }else{
+    writeLocal(CLAIM_KEY, claimed);
+  }
+  const pic = card && card.querySelector(".pic");
+  if(isOn && pic && !reduceMotion) popBalloon(pic, ()=>paint(id));
+  else paint(id);
+}
+
+/* ---------- peek dialog ---------- */
+function openPeek(id){
+  const found = findGift(id);
+  if(!found) return;
+  const {gift:g, index:i} = found;
+  const store = storeOf(g.url);
+  const isOn = !!claimed[g.id];
+  peekId = id;
+  const dlg = $("peek");
+  dlg.innerHTML = `
+    <div class="peek-inner${isOn ? " claimed" : ""}" data-card="${g.id}" style="${accentVars(i)}">
+      <button class="x" aria-label="Close">${CLOSE}</button>
+      <div class="pic"><img src="${esc(g.img)}" alt="${esc(g.name)}"><span class="stamp">Claimed!</span></div>
+      <div class="peek-info">
+        <div>
+          ${store ? `<span class="tape">${esc(store)}</span>` : ""}
+          <h2 id="peekTitle">${esc(g.name)}</h2>
+          <span class="big-price">$${g.price}</span>
+          ${g.reqs.length ? `<div class="reqs">${g.reqs.map(r=>`<span>${esc(r)}</span>`).join("")}</div>` : ""}
+        </div>
+        <a class="go" href="${esc(g.url)}" target="_blank" rel="noopener noreferrer">View on ${esc(store || "store")} ${ARROW}</a>
+        <button class="claim" data-id="${g.id}" aria-pressed="${isOn}">${isOn ? "Claimed! (undo)" : "Claim this gift"}</button>
+      </div>
+    </div>`;
+  dlg.showModal();
+}
+
+function wire(){
+  $("who").addEventListener("click", e=>{
+    const tab = e.target.closest(".tab");
+    if(!tab || tab.dataset.id === current) return;
+    current = tab.dataset.id;
+    filter = "all";
+    writeLocal(TAB_KEY, current);
+    history.replaceState(null, "", "#" + current);
+    renderAll();
+  });
+  $("filters").addEventListener("click", e=>{
+    const chip = e.target.closest(".chip");
+    if(!chip) return;
+    filter = chip.dataset.f;
+    renderFilters();
+    renderBoard();
+  });
+  $("stickers").addEventListener("click", e=>{
+    const card = e.target.closest(".sticker");
+    if(!card) return;
+    const claimBtn = e.target.closest(".claim");
+    if(claimBtn) toggle(claimBtn.dataset.id, card);
+    else openPeek(card.dataset.card);
+  });
+  const dlg = $("peek");
+  dlg.addEventListener("click", e=>{
+    if(e.target === dlg || e.target.closest(".x")){ dlg.close(); return; }
+    const claimBtn = e.target.closest(".claim");
+    if(claimBtn) toggle(claimBtn.dataset.id, dlg.querySelector(".peek-inner"));
+  });
+  dlg.addEventListener("close", ()=>{ peekId = null; });
+  window.addEventListener("hashchange", ()=>{
+    const id = location.hash.slice(1);
+    if(PEOPLE.some(p=>p.id === id) && id !== current){ current = id; filter = "all"; renderAll(); }
+  });
+}
+
+/* ---------- shared claims (Firebase Realtime Database) ---------- */
+function setSync(state){
+  const el = $("sync");
+  el.className = "sync " + state;
+  el.textContent = state === "live" ? "Live: everyone sees claims"
+    : state === "error" ? "Offline: claims save on this device"
+    : "Claims save on this device";
+}
+function loadScript(src){
+  return new Promise((res, rej)=>{
+    const s = document.createElement("script");
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+async function connectShared(){
+  setSync("local");
+  if(!FIREBASE_CONFIG) return;
+  try{
+    await loadScript(FIREBASE_CDN + "firebase-app-compat.js");
+    await loadScript(FIREBASE_CDN + "firebase-database-compat.js");
+    firebase.initializeApp(FIREBASE_CONFIG);
+    sharedRef = firebase.database().ref("claimed");
+    sharedRef.on("value", snap=>{
+      const next = snap.val() || {};
+      const changed = new Set([...Object.keys(next), ...Object.keys(claimed)]);
+      claimed = next;
+      changed.forEach(paint);
+      setSync("live");
+    }, ()=>{ sharedRef = null; setSync("error"); });
+  }catch(e){
+    sharedRef = null;
+    setSync("error");
+  }
+}
+
+renderCountdown();
+renderAll();
+wire();
+connectShared();
+</script>
+</body>
+</html>
