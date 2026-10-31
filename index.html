@@ -183,6 +183,23 @@
     padding:6px 6px 0;
   }
 
+  .cat-title{
+    display:flex; align-items:center; gap:10px;
+    margin:44px 0 26px;
+    font-family:"Fredoka", sans-serif; font-weight:700; font-size:1.35rem;
+  }
+  .cat-title:first-child{margin-top:4px;}
+  .cat-title span{
+    background:var(--lemon); border:var(--stroke); border-radius:12px;
+    padding:2px 14px; transform:rotate(-1.5deg);
+  }
+  .cat-title small{
+    font-size:.8rem; min-width:26px; height:26px; padding:0 7px;
+    display:inline-grid; place-items:center;
+    border-radius:999px; background:var(--cream); border:2px solid var(--ink);
+  }
+  .cat-title::after{content:""; flex:1; border-top:2.5px dashed color-mix(in srgb, var(--ink) 30%, transparent);}
+
   /* ---------- sticker card ---------- */
   .sticker{
     position:relative;
@@ -388,7 +405,7 @@
       <div class="tally" id="tally"></div>
       <div class="filters" id="filters"></div>
     </div>
-    <div class="stickers" id="stickers"></div>
+    <div id="stickers"></div>
     <div class="empty" id="empty" hidden>
       <svg viewBox="0 0 120 120" aria-hidden="true">
         <path d="M60 10L22 100h76z" fill="#b28dff" stroke="#2a1846" stroke-width="3" stroke-linejoin="round"/>
@@ -423,28 +440,28 @@ const FIREBASE_CONFIG = {
 const FIREBASE_CDN = "https://cdn.jsdelivr.net/npm/firebase@10.12.2/";
 
 const PEOPLE = [
-  {id:"mom-dad", name:"Mom & Dad", color:"#ff5c9d", gifts:[
-    {id:"B0BYB79YD9", name:"Aurora Palm Pals Belle Strawberry Cow Plush", price:9, reqs:[], img:"img/belle-strawberry-cow.jpg", url:"https://www.amazon.com/dp/B0BYB79YD9"},
-    {id:"1450845800", name:"The Book of Unusual Knowledge", price:11, reqs:["Hardcover"], img:"img/book-of-unusual-knowledge.jpg", url:"https://www.amazon.com/dp/1450845800"},
-    {id:"B0GD9N7J9F", name:"STARBOX Nook Nooks Series 1 LED Blind Box", price:26, reqs:["Get 2","$13 each"], img:"img/starbox-nook-nooks.jpg", url:"https://www.amazon.com/dp/B0GD9N7J9F"},
-    {id:"B0HC2WT1F3", name:"Dr Pepper Sticker Pack, 60 pcs", price:6, reqs:[], img:"img/dr-pepper-stickers.jpg", url:"https://www.amazon.com/dp/B0HC2WT1F3"},
-    {id:"T95104542", name:"Squishmallows Mallow Moods Mystery Box", price:10, reqs:["Target exclusive"], img:"img/squishmallows-mallow-moods.jpg", url:"https://www.target.com/p/squishmallows-little-plush-mallow-moods-mystery-boxes/-/A-95104542"},
-    {id:"T94991953", name:"Disney Doorables Squish'alots Pop'n Pinball Game", price:10, reqs:[], img:"img/doorables-squishalots-pinball.jpg", url:"https://www.target.com/p/disney-doorables-squish-226-8364-8482-alots-poppin-pinball-game-by-just-play/-/A-94991953"},
-    {id:"150722432X", name:"The Unofficial TikTok Cookbook, Volume 2", price:12, reqs:[], img:"img/unofficial-tiktok-cookbook-2.jpg", url:"https://www.amazon.com/dp/150722432X"},
-    {id:"B0DBLTZLHD", name:"Josnown Fuzzy Socks, 5 Pairs", price:10, reqs:[], img:"img/fuzzy-socks.jpg", url:"https://www.amazon.com/dp/B0DBLTZLHD"},
-    {id:"B0GS758GR5", name:"WabiSabi Puppy Party Plush Keychain Blind Box", price:13, reqs:[], img:"img/wabisabi-puppy-party.jpg", url:"https://www.amazon.com/dp/B0GS758GR5"},
-    {id:"B0GQS2GN4R", name:"Banana Duck Plush, 7 inch", price:12, reqs:[], img:"img/banana-duck-plush.jpg", url:"https://www.amazon.com/dp/B0GQS2GN4R"},
-    {id:"B0GR8XC9ZM", name:"Summer Monday Lip Butter Balm, 6 Pack", price:10, reqs:[], img:"img/lip-butter-balm-6pc.jpg", url:"https://www.amazon.com/dp/B0GR8XC9ZM"},
-    {id:"T94739455", name:"Mini Brands Create: Mini Masterpieces", price:8, reqs:[], img:"img/mini-brands-mini-masterpieces.jpg", url:"https://www.target.com/p/mini-brands-mini-masterpieces/-/A-94739455"},
-    {id:"B0DB4LX14M", name:"Pink Palace House Building Set with Lights, 1349 pcs", price:50, reqs:[], img:"img/pink-palace-building-set.jpg", url:"https://www.amazon.com/dp/B0DB4LX14M"},
-    {id:"B0GKL4VKZX", name:"Anxiety Bookshelf with Mini Books", price:33, reqs:["Brown","Large"], img:"img/anxiety-bookshelf-brown.jpg", url:"https://www.amazon.com/dp/B0GKL4VKZX"},
-    {id:"B0BCCXZDT5", name:"Roblox Digital Gift Card, 1,500 Robux", price:15, reqs:["$15 card"], img:"img/roblox-gift-card.jpg", url:"https://www.amazon.com/dp/B0BCCXZDT5"},
-    {id:"B0GFDYN1Q7", name:"Fuggler Fugg Nuggets Plush Bag Charms, 6-Pack", price:35, reqs:[], img:"img/fugg-nuggets-pack.jpg", url:"https://www.amazon.com/dp/B0GFDYN1Q7"},
-    {id:"B0GK71Q74Z", name:"Fuggler Fuggalicious Mystery Blind Bag", price:25, reqs:[], img:"img/fuggalicious-mystery.jpg", url:"https://www.amazon.com/dp/B0GK71Q74Z"},
-    {id:"B0F1XFFCXX", name:"Handheld Mini Fan", price:2, reqs:["White","Amazon Haul","Batteries"], img:"img/handheld-fan.jpg", url:"https://www.amazon.com/dp/B0F1XFFCXX"},
-    {id:"B0FJ8BF22Q", name:"Large Acrylic Display Case, 2 Removable Shelves", price:20, reqs:[], img:"img/display-case.jpg", url:"https://www.amazon.com/dp/B0FJ8BF22Q"},
-    {id:"B0F4KJNRHJ", name:"Dried Flower Bookmark Kit, 20 pcs", price:2, reqs:["Amazon Haul"], img:"img/dried-flower-bookmark-kit.jpg", url:"https://www.amazon.com/dp/B0F4KJNRHJ"},
-    {id:"B0H4QRJPMV", name:"Good Duck Mini Building Block Figure", price:2, reqs:["Amazon Haul"], img:"img/good-duck-block-figure.jpg", url:"https://www.amazon.com/dp/B0H4QRJPMV"},
+  {id:"mom-dad", name:"Mom & Dad", color:"#ff5c9d", cats:["Plushies", "Mystery & Blind Boxes", "Books & Reading", "Building", "Cozy & Beauty", "Room & Everyday", "Gift Cards"], gifts:[
+    {id:"B0BYB79YD9", cat:"Plushies", name:"Aurora Palm Pals Belle Strawberry Cow Plush", price:9, reqs:[], img:"img/belle-strawberry-cow.jpg", url:"https://www.amazon.com/dp/B0BYB79YD9"},
+    {id:"1450845800", cat:"Books & Reading", name:"The Book of Unusual Knowledge", price:11, reqs:["Hardcover"], img:"img/book-of-unusual-knowledge.jpg", url:"https://www.amazon.com/dp/1450845800"},
+    {id:"B0GD9N7J9F", cat:"Mystery & Blind Boxes", name:"STARBOX Nook Nooks Series 1 LED Blind Box", price:26, reqs:["Get 2","$13 each"], img:"img/starbox-nook-nooks.jpg", url:"https://www.amazon.com/dp/B0GD9N7J9F"},
+    {id:"B0HC2WT1F3", cat:"Room & Everyday", name:"Dr Pepper Sticker Pack, 60 pcs", price:6, reqs:[], img:"img/dr-pepper-stickers.jpg", url:"https://www.amazon.com/dp/B0HC2WT1F3"},
+    {id:"T95104542", cat:"Mystery & Blind Boxes", name:"Squishmallows Mallow Moods Mystery Box", price:10, reqs:["Target exclusive"], img:"img/squishmallows-mallow-moods.jpg", url:"https://www.target.com/p/squishmallows-little-plush-mallow-moods-mystery-boxes/-/A-95104542"},
+    {id:"T94991953", cat:"Mystery & Blind Boxes", name:"Disney Doorables Squish'alots Pop'n Pinball Game", price:10, reqs:[], img:"img/doorables-squishalots-pinball.jpg", url:"https://www.target.com/p/disney-doorables-squish-226-8364-8482-alots-poppin-pinball-game-by-just-play/-/A-94991953"},
+    {id:"150722432X", cat:"Books & Reading", name:"The Unofficial TikTok Cookbook, Volume 2", price:12, reqs:[], img:"img/unofficial-tiktok-cookbook-2.jpg", url:"https://www.amazon.com/dp/150722432X"},
+    {id:"B0DBLTZLHD", cat:"Cozy & Beauty", name:"Josnown Fuzzy Socks, 5 Pairs", price:10, reqs:[], img:"img/fuzzy-socks.jpg", url:"https://www.amazon.com/dp/B0DBLTZLHD"},
+    {id:"B0GS758GR5", cat:"Mystery & Blind Boxes", name:"WabiSabi Puppy Party Plush Keychain Blind Box", price:13, reqs:[], img:"img/wabisabi-puppy-party.jpg", url:"https://www.amazon.com/dp/B0GS758GR5"},
+    {id:"B0GQS2GN4R", cat:"Plushies", name:"Banana Duck Plush, 7 inch", price:12, reqs:[], img:"img/banana-duck-plush.jpg", url:"https://www.amazon.com/dp/B0GQS2GN4R"},
+    {id:"B0GR8XC9ZM", cat:"Cozy & Beauty", name:"Summer Monday Lip Butter Balm, 6 Pack", price:10, reqs:[], img:"img/lip-butter-balm-6pc.jpg", url:"https://www.amazon.com/dp/B0GR8XC9ZM"},
+    {id:"T94739455", cat:"Mystery & Blind Boxes", name:"Mini Brands Create: Mini Masterpieces", price:8, reqs:[], img:"img/mini-brands-mini-masterpieces.jpg", url:"https://www.target.com/p/mini-brands-mini-masterpieces/-/A-94739455"},
+    {id:"B0DB4LX14M", cat:"Building", name:"Pink Palace House Building Set with Lights, 1349 pcs", price:50, reqs:[], img:"img/pink-palace-building-set.jpg", url:"https://www.amazon.com/dp/B0DB4LX14M"},
+    {id:"B0GKL4VKZX", cat:"Books & Reading", name:"Anxiety Bookshelf with Mini Books", price:33, reqs:["Brown","Large"], img:"img/anxiety-bookshelf-brown.jpg", url:"https://www.amazon.com/dp/B0GKL4VKZX"},
+    {id:"B0BCCXZDT5", cat:"Gift Cards", name:"Roblox Digital Gift Card, 1,500 Robux", price:15, reqs:["$15 card"], img:"img/roblox-gift-card.jpg", url:"https://www.amazon.com/dp/B0BCCXZDT5"},
+    {id:"B0GFDYN1Q7", cat:"Plushies", name:"Fuggler Fugg Nuggets Plush Bag Charms, 6-Pack", price:35, reqs:[], img:"img/fugg-nuggets-pack.jpg", url:"https://www.amazon.com/dp/B0GFDYN1Q7"},
+    {id:"B0GK71Q74Z", cat:"Mystery & Blind Boxes", name:"Fuggler Fuggalicious Mystery Blind Bag", price:25, reqs:[], img:"img/fuggalicious-mystery.jpg", url:"https://www.amazon.com/dp/B0GK71Q74Z"},
+    {id:"B0F1XFFCXX", cat:"Room & Everyday", name:"Handheld Mini Fan", price:2, reqs:["White","Amazon Haul","Batteries"], img:"img/handheld-fan.jpg", url:"https://www.amazon.com/dp/B0F1XFFCXX"},
+    {id:"B0FJ8BF22Q", cat:"Room & Everyday", name:"Large Acrylic Display Case, 2 Removable Shelves", price:20, reqs:[], img:"img/display-case.jpg", url:"https://www.amazon.com/dp/B0FJ8BF22Q"},
+    {id:"B0F4KJNRHJ", cat:"Books & Reading", name:"Dried Flower Bookmark Kit, 20 pcs", price:2, reqs:["Amazon Haul"], img:"img/dried-flower-bookmark-kit.jpg", url:"https://www.amazon.com/dp/B0F4KJNRHJ"},
+    {id:"B0H4QRJPMV", cat:"Building", name:"Good Duck Mini Building Block Figure", price:2, reqs:["Amazon Haul"], img:"img/good-duck-block-figure.jpg", url:"https://www.amazon.com/dp/B0H4QRJPMV"},
   ]},
   {id:"grandma-grandpa", name:"Grandma & Grandpa", color:"#ff9f1c", gifts:[
     {id:"B0H5JXPV5Z", name:"MGA's Miniverse Real TV Player", price:25, reqs:[], img:"img/miniverse-real-tv-player.jpg", url:"https://www.amazon.com/dp/B0H5JXPV5Z"},
@@ -586,7 +603,22 @@ function renderBoard(){
   const p = person();
   const test = FILTERS.find(f=>f.id === filter).test;
   const shown = p.gifts.map((g, i)=>({g, i})).filter(({g})=>test(g.price));
-  $("stickers").innerHTML = shown.map(({g, i}, n)=>stickerHTML(g, i, n)).join("");
+  const cats = p.cats || [];
+  let n = 0;
+  const grid = list=>`<div class="stickers">${list.map(({g, i})=>stickerHTML(g, i, n++)).join("")}</div>`;
+  const heading = (name, count)=>`<h3 class="cat-title"><span>${esc(name)}</span><small>${count}</small></h3>`;
+  let html = "";
+  if(cats.length){
+    for(const c of cats){
+      const inCat = shown.filter(({g})=>g.cat === c);
+      if(inCat.length) html += heading(c, inCat.length) + grid(inCat);
+    }
+    const rest = shown.filter(({g})=>!cats.includes(g.cat));
+    if(rest.length) html += heading("Other", rest.length) + grid(rest);
+  }else{
+    html = grid(shown);
+  }
+  $("stickers").innerHTML = html;
   $("board").setAttribute("aria-label", p.name);
   const empty = shown.length === 0;
   $("empty").hidden = !empty;
